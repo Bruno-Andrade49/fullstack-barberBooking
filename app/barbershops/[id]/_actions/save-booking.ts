@@ -1,4 +1,6 @@
-import { db } from "../../../_lib/prisma";
+"use server"
+
+import { db } from "@/app/_lib/prisma";
 
 
 interface SaveBookingParams {
