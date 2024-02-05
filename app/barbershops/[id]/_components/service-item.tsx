@@ -10,15 +10,12 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../_helpers/hours";
-import { format, setDate, setHours, setMinutes } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { saveBooking } from "../_actions/save-booking";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getDayBookings } from "../_actions/get-bookings";
-import { time } from "console";
-import router from "next/router";
 
 interface ServiceItemProps {
     barbershop: Barbershop
