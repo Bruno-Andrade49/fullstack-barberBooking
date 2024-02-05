@@ -1,10 +1,11 @@
 import { db } from "@/app/_lib/prisma"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth, { AuthOptions } from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import { Adapter } from "next-auth/adapters"
 import GoogleProvder from "next-auth/providers/google"
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
+
     adapter: PrismaAdapter(db) as Adapter,
     providers: [GoogleProvder({
         clientId: process.env.GOOGLE_CLIENT_ID as string,
