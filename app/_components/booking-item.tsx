@@ -1,32 +1,63 @@
+import { Booking, Prisma } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
+import { format, isFuture, isPast } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const BookingItem = () => {
+interface BookingItemProps {
+    booking: Prisma.BookingGetPayload<{
+        include: {
+            service: true,
+        }
+    }>;
+}
+
+const BookingItem = ({ booking }: BookingItemProps) => {
+
+    const isBookingConfirmed = isFuture(booking.date)
+
     return (
         <Card>
-            <CardContent className="p-5 flex flex-row justify-between py-0">
-                <div className="flex flex-col gap-2 py-5">
-                    <Badge className="bg-[#221c3d] text-primary hover:bg-[#221c4d] w-fit"> Confirmado </Badge>
-                    <h2 className="font-bold">Corte de Cabelo</h2>
+            <CardContent className="flex flex-row py-0 px-0">
+                <div className="flex flex-col gap-2 py-5 flex-[3] pl-5">
+                    <Badge className="w-fit" variant={isBookingConfirmed ? "default" : "secondary"}>
+                        {
+                            isBookingConfirmed ? "Confirmado" : "Finalizado"
+                        }
+                    </Badge>
+                    <h2 className="font-bold">{booking.service.name}</h2>
                     <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
-                            <AvatarImage src="https://utfs.io/f/0ddfbd26-a424-43a0-aaf3-c3f1dc6be6d1-1kgxo7.png" />
+                            <AvatarImage src={booking.barbershop.imageUrl} />
 
-                            <AvatarFallback>A</AvatarFallback>
+                            <AvatarFallback>{(booking.barbershop.name).charAt(0)}</AvatarFallback>
                         </Avatar>
 
                         <h3 className="text-sm">
-                            Vintage Barber
+                            {booking.barbershop.name}
                         </h3>
 
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center border-l border-solid border-secondary px-3">
-                    <p className="text-sm">Fevereiro</p>
-                    <p className="text-2xl"> 06 </p>
-                    <p className="text-sm"> 09:45 </p>
+                <div className="flex flex-col items-center justify-center border-l border-solid border-secondary px-3 flex-1">
+                    <p className="text-sm capitalize">
+                        {format(booking.date, "MMMM", {
+                            locale: ptBR
+                        })}</p>
+                    <p className="text-2xl">
+                        {format(booking.date, "dd", {
+                            locale: ptBR
+                        })}
+                    </p>
+                    <p className="text-sm">
+                        {
+                            format(booking.date, "HH:mm", {
+                                locale: ptBR
+                            })
+                        }
+                    </p>
                 </div>
 
             </CardContent>
